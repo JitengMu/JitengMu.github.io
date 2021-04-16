@@ -39,15 +39,15 @@ input[type=range].slider:focus {
 }
 
 input[type=range].slider:not([orient=vertical])::-webkit-slider-runnable-track {
-    width: 100%
+    width: 100%;
 }
 
 input[type=range].slider:not([orient=vertical])::-moz-range-track {
-    width: 100%
+    width: 100%;
 }
 
 input[type=range].slider:not([orient=vertical])::-ms-track {
-    width: 100%
+    width: 100%;
 }
 
 input[type=range].slider:not([orient=vertical]).has-output+output,

@@ -2,8 +2,12 @@ window.HELP_IMPROVE_VIDEOJS = false;
 
 var BASE = "img";
 var NUM_1_DOF_FRAMES = 91;
-var NUM_2_DOF_FRAMES = 30;
+var NUM_2_DOF_FRAMES = 121;
+var NUM_2_DOF_FRAMES_JOINT = 11;
+var NUM_laptop_FRAMES = 29;
 
+var images_laptop_12 = [];
+var images_laptop_13 = [];
 var images_door_10 = [];
 var images_door_27 = [];
 var images_oven_2 = [];
@@ -13,8 +17,17 @@ var images_eyeglasses_37 = [];
 var images_fridge_61 = [];
 var images_fridge_65 = [];
 
-
 function preloadImages() {
+    for (var i = 0; i < NUM_laptop_FRAMES; i++) {
+        var path = BASE + '/laptop12/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.jpg';
+        images_laptop_12[i] = new Image();
+        images_laptop_12[i].src = path;
+    }
+    for (var i = 0; i < NUM_laptop_FRAMES; i++) {
+        var path = BASE + '/laptop13/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.jpg';
+        images_laptop_13[i] = new Image();
+        images_laptop_13[i].src = path;
+    }
 
     for (var i = 0; i < NUM_1_DOF_FRAMES; i++) {
         var path = BASE + '/door10/frame_' + String(i).padStart(2, '0') + '_delay-0.08s.jpg';
@@ -37,22 +50,22 @@ function preloadImages() {
         images_oven_10[i].src = path;
     }
     for (var i = 0; i < NUM_2_DOF_FRAMES; i++) {
-        var path = BASE + '/eyeglasses36/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.jpg';
+        var path = BASE + '/eyeglasses36/frame_' + String(i).padStart(3, '0') + '_delay-0.1s.jpg';
         images_eyeglasses_36[i] = new Image();
         images_eyeglasses_36[i].src = path;
     }
     for (var i = 0; i < NUM_2_DOF_FRAMES; i++) {
-        var path = BASE + '/eyeglasses37/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.jpg';
+        var path = BASE + '/eyeglasses37/frame_' + String(i).padStart(3, '0') + '_delay-0.1s.jpg';
         images_eyeglasses_37[i] = new Image();
         images_eyeglasses_37[i].src = path;
     }
     for (var i = 0; i < NUM_2_DOF_FRAMES; i++) {
-        var path = BASE + '/fridge61/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.jpg';
+        var path = BASE + '/fridge61/frame_' + String(i).padStart(3, '0') + '_delay-0.1s.jpg';
         images_fridge_61[i] = new Image();
         images_fridge_61[i].src = path;
     }
     for (var i = 0; i < NUM_2_DOF_FRAMES; i++) {
-        var path = BASE + '/fridge65/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.jpg';
+        var path = BASE + '/fridge65/frame_' + String(i).padStart(3, '0') + '_delay-0.1s.jpg';
         images_fridge_65[i] = new Image();
         images_fridge_65[i].src = path;
     }
@@ -60,6 +73,20 @@ function preloadImages() {
 }
 
 // POSE - swatguy
+
+function setlaptop12(i) {
+    var image = images_laptop_12[i];
+    image.ondragstart = function() { return false; };
+    image.oncontextmenu = function() { return false; };
+    $('#wrapper_laptop12').empty().append(image);
+}
+function setlaptop13(i) {
+    var image = images_laptop_13[i];
+    image.ondragstart = function() { return false; };
+    image.oncontextmenu = function() { return false; };
+    $('#wrapper_laptop13').empty().append(image);
+}
+
 function setdoor10(i) {
     var image = images_door_10[i];
     image.ondragstart = function() { return false; };
@@ -127,7 +154,7 @@ $(document).ready(function() {
         autoplaySpeed: 3000,
     }
 
-    // Initialize all div with carousel class
+/*    // Initialize all div with carousel class
     var carousels = bulmaCarousel.attach('.carousel', options);
 
     // Loop on each carousel initialized
@@ -158,6 +185,19 @@ $(document).ready(function() {
 
 
     // POSE - swatguy
+
+    $('#laptop12').on('input', function(event) {
+        setlaptop12(this.value);
+    });
+    setlaptop12(0);
+    $('#laptop12').prop('max', NUM_laptop_FRAMES - 1);
+
+    $('#laptop13').on('input', function(event) {
+        setlaptop13(this.value);
+    });
+    setlaptop13(0);
+    $('#laptop13').prop('max', NUM_laptop_FRAMES - 1);
+
     $('#door10').on('input', function(event) {
         setdoor10(this.value);
     });
@@ -182,30 +222,78 @@ $(document).ready(function() {
     setoven10(0);
     $('#oven10').prop('max', NUM_1_DOF_FRAMES - 1);
 
-    $('#eyeglasses36').on('input', function(event) {
-        seteyeglasses36(this.value);
+    $('#eyeglasses36-1').on('input', function(event) {
+        var idx = (+$('#eyeglasses36-1').val())*11 + (+$('#eyeglasses36-2').val());
+        seteyeglasses36(idx);
     });
+    $('#eyeglasses36-1').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
+
+    $('#eyeglasses36-2').on('input', function(event) {
+        var idx = (+$('#eyeglasses36-1').val())*11 + (+$('#eyeglasses36-2').val());
+        seteyeglasses36(idx);
+    });
+    $('#eyeglasses36-2').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
     seteyeglasses36(0);
-    $('#eyeglasses36').prop('max', NUM_2_DOF_FRAMES - 1);
 
-    $('#eyeglasses37').on('input', function(event) {
-        seteyeglasses37(this.value);
+    $('#eyeglasses37-1').on('input', function(event) {
+        var idx = (+$('#eyeglasses37-1').val())*11 + (+$('#eyeglasses37-2').val());
+        seteyeglasses37(idx);
     });
-    seteyeglasses37(0);
-    $('#eyeglasses37').prop('max', NUM_2_DOF_FRAMES - 1);
+    $('#eyeglasses37-1').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
 
-    $('#fridge61').on('input', function(event) {
+    $('#eyeglasses37-2').on('input', function(event) {
+        var idx = (+$('#eyeglasses37-1').val())*11 + (+$('#eyeglasses37-2').val());
+        seteyeglasses37(idx);
+    });
+    $('#eyeglasses37-2').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
+    seteyeglasses37(0);
+
+    $('#fridge61-1').on('input', function(event) {
+        var idx = (+$('#fridge61-1').val())*11 + (+$('#fridge61-2').val());
+        setfridge61(idx);
+    });
+    $('#fridge61-1').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
+
+    $('#fridge61-2').on('input', function(event) {
+        var idx = (+$('#fridge61-1').val())*11 + (+$('#fridge61-2').val());
+        setfridge61(idx);
+    });
+    $('#fridge61-2').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
+    setfridge61(0);
+
+    $('#fridge65-1').on('input', function(event) {
+        var idx = (+$('#fridge65-1').val())*11 + (+$('#fridge65-2').val());
+        setfridge65(idx);
+    });
+    $('#fridge65-1').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
+
+    $('#fridge65-2').on('input', function(event) {
+        var idx = (+$('#fridge65-1').val())*11 + (+$('#fridge65-2').val());
+        setfridge65(idx);
+    });
+    $('#fridge65-2').prop('max', NUM_2_DOF_FRAMES_JOINT - 1);
+    setfridge65(0);
+
+/*    $('#fridge61').on('input', function(event) {
         setfridge61(this.value);
     });
     setfridge61(0);
     $('#fridge61').prop('max', NUM_2_DOF_FRAMES - 1);
 
-    $('#fridge65').on('input', function(event) {
-        setfridge65(this.value);
+    $('#fridge65-1').on('input', function(event) {
+        var idx = +$('#fridge65-1').val() + +$('#fridge65-2').val();
+        setfridge65(idx);
     });
-    setfridge65(0);
-    $('#fridge65').prop('max', NUM_2_DOF_FRAMES - 1);
+    setfridge65(0,0);
+    $('#fridge65-1').prop('max', NUM_2_DOF_FRAMES - 1);
 
+    $('#fridge65-2').on('input', function(event) {
+        var idx = +$('#fridge65-1').val() + +$('#fridge65-2').val();
+        setfridge65(idx);
+    });
+    setfridge65(0,0);
+    $('#fridge65-2').prop('max', NUM_2_DOF_FRAMES - 1);
+*/
 
     bulmaSlider.attach();
 
